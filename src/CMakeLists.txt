@@ -12,22 +12,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Add optimization flags for builds
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
-# Define a variable for the exercise number, defaulting to 1 if not set
-set(EXERCISE_NUMBER 1 CACHE STRING "Exercise number to build")
-
 # Set the source file name to Exercise#.cpp
-set(SOURCE_FILE "Exercise${EXERCISE_NUMBER}.cpp")
-message("Configuring build for: ${SOURCE_FILE}")
+set(SOURCE_FILE "HighPerformanceLinearAlgebra.cpp")
+message("Configuring build for: HighPerformanceLinearAlgebra.cpp")
 
 # Create the executable file for this exercise given the proper source file
-add_executable(Exercise${EXERCISE_NUMBER} ${SOURCE_FILE})
+add_executable(hpla ${SOURCE_FILE})
 
 # Add OpenMP package for Intel compilation
 find_package(OpenMP REQUIRED)
 add_compile_options(-fopenmp)
-target_compile_options(Exercise${EXERCISE_NUMBER} PRIVATE -fopenmp)
+target_compile_options(hpla PRIVATE -fopenmp)
 # Link OpenMP runtime to the executable
-target_link_libraries(Exercise${EXERCISE_NUMBER} PRIVATE OpenMP::OpenMP_CXX)
+target_link_libraries(hpla PRIVATE OpenMP::OpenMP_CXX)
 
 # Ensure target compiled with C++23
-target_compile_features(Exercise${EXERCISE_NUMBER} PRIVATE cxx_std_23)
+target_compile_features(hpla PRIVATE cxx_std_23)
