@@ -1,6 +1,8 @@
-# High-Performance-Linear-Algebra
+# High Performance Linear Algebra
 The final project for COE 322: Scientific Computation
+
 Luke Venkataramanan
+
 Alex Lozano
 
 ## Compilation instructions
