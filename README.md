@@ -9,7 +9,10 @@ In order to simplify compilation, building, and ensuring the program runs on the
 In order to run the program, create a new terminal. Navigate to the project root directory, and enter the following:
 
 *chmod +x build.sh*
+
 *./build.sh*
 
---
+## Description
+Naive matrix multiplication is not very efficient. This project employs a recursive block matrix multiplication algorithm that makes matrix multiplication high performance, leveraging how caches retrieve and store memory. We also employ techniques for parallel computing. We use the libraries mdspan and OpenMP, with our source code in C++.
+
 The program has a UI that asks the user how large the matrices should be, as well as whether they would like the computation to use parallelization or not.
