@@ -1,7 +1,7 @@
 # High Performance Linear Algebra
 Luke Venkataramanan, Alex Lozano
 
-## Compilation instructions
+## Build Instructions
 In order to simplify compilation, building, and ensuring the program runs on the correct number of threads, we decided to use a build script called build.sh.
 
 In order to run the program, create a new terminal. Navigate to the project root directory, and enter the following:
