@@ -1,9 +1,5 @@
 # High Performance Linear Algebra
-The final project for COE 322: Scientific Computation
-
-Luke Venkataramanan
-
-Alex Lozano
+Luke Venkataramanan, Alex Lozano
 
 ## Compilation instructions
 In order to simplify compilation, building, and ensuring the program runs on the correct number of threads, we decided to use a build script called build.sh.
