@@ -17,6 +17,6 @@ cmake ../src
 make
 
 # Run the newly compiled executable
-./hpla
+./HighPerformanceLinearAlgebra
 
 

@@ -386,22 +386,24 @@ public:
 
 int main() {
     int n;
+    cout << "====================================================================================================" << endl;
     cout << "Welcome user! This program will compute the matrix-matrix product of two matrices of random numbers." << endl;
-    cout << "Please enter a integer value n, such that the dimension of the matrix will be 2^n: ";
+    cout << "\nPlease enter a integer value n, such that the dimension of the matrix will be 2^n: ";
     cin >> n;
-    cout << "\nYou entered n = " << n << endl;
     int N = pow(2, n);
+    cout << "You entered n = " << n << ", so the matrix dimensions are (" << N << "x" << N << ")" << endl;
 
     char parallelChoice;
-    cout << "Would you like the program to utilize parallelization? (Enter 'y' for yes, 'n' for no): ";
+    cout << "\nWould you like the program to utilize parallelization? (Enter 'y' for yes, 'n' for no): ";
     cin >> parallelChoice;
     bool useParallel = (parallelChoice == 'y');
     if (useParallel)
-        cout << "\nYou entered, yes, you would like the computation to use parallelization." << endl;
+        cout << "You entered, yes, you would like the computation to use parallelization." << endl;
     else
-        cout << "\nYou entered, no, you would not like the computation to use parallelization." << endl;
+        cout << "You entered, no, you would not like the computation to use parallelization." << endl;
 
     cout << "\nComputing the matrix product of A*B = C...\n" << endl;
+    cout << "----------------------------------------------" << endl;
     
     // Specify the engine and distribution.
     random_device rnd_device;  // First create an instance of an engine.
@@ -425,19 +427,21 @@ int main() {
     auto time = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count());
     cout << "Recursive Duration: " << chrono::duration_cast<chrono::milliseconds> (after-before).count() << " ms" << endl;
     double numOps = 2.0 * pow(N, 3);
-    auto secs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
-    double FLOPS = numOps / secs;
-    cout << "Recursive FLOPS = " << FLOPS << ", GFLOPS = " << FLOPS/(1.e9) << "\n" << endl;
+    auto rSecs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
+    double rFLOPS = numOps / rSecs;
+    cout << "Recursive FLOPS = " << rFLOPS << ", GFLOPS = " << rFLOPS/(1.e9) << "\n" << endl;
     
     // Test duration for Naive Matrix Multiplication
     before = clock::now();
     Matrix D = A.NaiveMatMult(B); 
     after = clock::now();
     cout << "Naive Duration: " << chrono::duration_cast<chrono::milliseconds> (after-before).count() << " ms" << endl;
-    secs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
-    FLOPS = numOps / secs;
-    cout << "Naive FLOPS = " << FLOPS << ", GFLOPS = " << FLOPS/(1.e9) << "\n" << endl;
+    double nSecs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
+    double nFLOPS = numOps / nSecs;
+    cout << "Naive FLOPS = " << nFLOPS << ", GFLOPS = " << nFLOPS/(1.e9) << "\n" << endl;
     
+    double ratio = nSecs/rSecs;
+    cout << "The recursive algorithm was " << ratio << " times faster than the naive implementation" << endl;
 
     // Check that recursive result matches naive result    
     if (C.equalMatrices(D)) {

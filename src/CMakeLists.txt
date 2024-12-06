@@ -17,14 +17,14 @@ set(SOURCE_FILE "HighPerformanceLinearAlgebra.cpp")
 message("Configuring build for: HighPerformanceLinearAlgebra.cpp")
 
 # Create the executable file for this exercise given the proper source file
-add_executable(hpla ${SOURCE_FILE})
+add_executable(HighPerformanceLinearAlgebra ${SOURCE_FILE})
 
 # Add OpenMP package for Intel compilation
 find_package(OpenMP REQUIRED)
 add_compile_options(-fopenmp)
-target_compile_options(hpla PRIVATE -fopenmp)
+target_compile_options(HighPerformanceLinearAlgebra PRIVATE -fopenmp)
 # Link OpenMP runtime to the executable
-target_link_libraries(hpla PRIVATE OpenMP::OpenMP_CXX)
+target_link_libraries(HighPerformanceLinearAlgebra PRIVATE OpenMP::OpenMP_CXX)
 
 # Ensure target compiled with C++23
-target_compile_features(hpla PRIVATE cxx_std_23)
+target_compile_features(HighPerformanceLinearAlgebra PRIVATE cxx_std_23)
