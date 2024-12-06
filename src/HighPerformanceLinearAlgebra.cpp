@@ -388,10 +388,10 @@ int main() {
     int n;
     cout << "====================================================================================================" << endl;
     cout << "Welcome user! This program will compute the matrix-matrix product of two matrices of random numbers." << endl;
-    cout << "\nPlease enter a integer value n, such that the dimension of the matrix will be 2^n: ";
+    cout << "\nPlease enter an integer value n, such that the dimension of the matrix will be 2^n: ";
     cin >> n;
     int N = pow(2, n);
-    cout << "You entered n = " << n << ", so the matrix dimensions are (" << N << "x" << N << ")" << endl;
+    cout << "You entered n = " << n << ", so the matrix dimensions are (" << N << "x" << N << ")." << endl;
 
     char parallelChoice;
     cout << "\nWould you like the program to utilize parallelization? (Enter 'y' for yes, 'n' for no): ";
@@ -401,8 +401,6 @@ int main() {
         cout << "You entered, yes, you would like the computation to use parallelization." << endl;
     else
         cout << "You entered, no, you would not like the computation to use parallelization." << endl;
-
-    cout << "\nComputing the matrix product of A*B = C...\n" << endl;
     cout << "----------------------------------------------" << endl;
     
     // Specify the engine and distribution.
@@ -420,6 +418,7 @@ int main() {
     Matrix B = Matrix(N, N, N, BData);
     
     // Test duration for Recursive Blocked Matrix Multiplication
+    cout << "\nComputing the matrix product of A*B = C, using the recursive algorithm..." << endl;
     using clock = chrono::steady_clock;  // Use steady clock for precise measurements
     clock::time_point before = clock::now();
     Matrix C = A.BlockedMatMult(B, useParallel); 
@@ -432,6 +431,7 @@ int main() {
     cout << "Recursive FLOPS = " << rFLOPS << ", GFLOPS = " << rFLOPS/(1.e9) << "\n" << endl;
     
     // Test duration for Naive Matrix Multiplication
+    cout << "Computing the matrix product of A*B = C, using the naive algorithm..." << endl;
     before = clock::now();
     Matrix D = A.NaiveMatMult(B); 
     after = clock::now();
@@ -441,15 +441,17 @@ int main() {
     cout << "Naive FLOPS = " << nFLOPS << ", GFLOPS = " << nFLOPS/(1.e9) << "\n" << endl;
     
     double ratio = nSecs/rSecs;
-    cout << "The recursive algorithm was " << ratio << " times faster than the naive implementation" << endl;
+    cout << "The recursive algorithm was " << ratio << " times faster than the naive implementation." << endl;
 
     // Check that recursive result matches naive result    
     if (C.equalMatrices(D)) {
-        cout << "Recursive and Naive approach computes same product. Matrix product results match!" << endl;
+        cout << "Recursive and naive approaches compute the same product. Matrix product results match." << endl;
     } else {
         cout << "Error: Matrix product results do NOT match" << endl;
     }
 
+    cout << "Goodbye!" << endl;
+    cout << "====================================================================================================" << endl;
     // Cleanup
     delete[] AData;
     delete[] BData;
