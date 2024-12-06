@@ -151,29 +151,29 @@ public:
     /**
      * @brief: Returns the top left quarter of the matrix (i.e. A11) - used in getSubmatrices()
      */
-    Matrix TopLeft(int i, int j) {
-        return Matrix(i, j, LDA, data.data_handle(), topLeftIndex);
+    Matrix TopLeft(int m, int n) {
+        return Matrix(m, n, LDA, data.data_handle(), topLeftIndex);
     }
 
     /**
      * @brief: Returns the top right quarter of the matrix (i.e. A12) - used in getSubmatrices()
      */
-    Matrix TopRight(int i, int j) {
-        return Matrix(i, j, LDA, data.data_handle(), topLeftIndex + j*LDA);
+    Matrix TopRight(int m, int n) {
+        return Matrix(m, n, LDA, data.data_handle(), topLeftIndex + n*LDA);
     }
 
     /**
      * @brief: Returns the bottom left quarter of the matrix (i.e. A21) - used in getSubmatrices()
      */
-    Matrix BotLeft(int i, int j) {
-        return Matrix(i, j, LDA, data.data_handle(), topLeftIndex + i);
+    Matrix BotLeft(int m, int n) {
+        return Matrix(m, n, LDA, data.data_handle(), topLeftIndex + m);
     }
 
     /**
      * @brief: Returns the bottom right quarter of the matrix (i.e. A22) - used in getSubmatrices()
      */
-    Matrix BotRight(int i, int j) {
-        return Matrix(i, j, LDA, data.data_handle(), topLeftIndex + j*LDA + i);
+    Matrix BotRight(int m, int n) {
+        return Matrix(m, n, LDA, data.data_handle(), topLeftIndex + n*LDA + m);
     }
 
     /**
@@ -268,6 +268,7 @@ public:
     /** Starter function
      * @brief: Starter function that calls recursive block function
      * @param other: The other matrix (B)
+     * @param parallel: True if the user indicated they would like this computation to use parallel computing, false otherwise
      * 
      * @return C: The matrix product of A*B, (C)
      */
@@ -316,9 +317,10 @@ public:
                     }
                 }
             }
+	    // Wait for all tasks to conclude before proceeding
             #pragma omp taskwait
         }
-        else {
+        else {  // If user didn't want parallel computing
             // C11 = (A11 * B11) + (A12 * B21)
             tla.RecursiveMatMult(tlb, tlc, dim); // C11 += A11 * B11
             tra.RecursiveMatMult(blb, tlc, dim); // C11 += A12 * B21
@@ -416,6 +418,9 @@ int main() {
     generate(BData, BData + (N * N), gen);
     Matrix A = Matrix(N, N, N, AData);
     Matrix B = Matrix(N, N, N, BData);
+
+    // The number of floating point operations based on our matrix size
+    double numOps = 2.0 * pow(N, 3);
     
     // Test duration for Recursive Blocked Matrix Multiplication
     cout << "\nComputing the matrix product of A*B = C, using the recursive algorithm..." << endl;
@@ -423,10 +428,8 @@ int main() {
     clock::time_point before = clock::now();
     Matrix C = A.BlockedMatMult(B, useParallel); 
     auto after = clock::now();
-    auto time = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count());
     cout << "Recursive Duration: " << chrono::duration_cast<chrono::milliseconds> (after-before).count() << " ms" << endl;
-    double numOps = 2.0 * pow(N, 3);
-    auto rSecs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
+    double rSecs = static_cast<double>(chrono::duration_cast<chrono::milliseconds> (after-before).count()) / 1000.;
     double rFLOPS = numOps / rSecs;
     cout << "Recursive FLOPS = " << rFLOPS << ", GFLOPS = " << rFLOPS/(1.e9) << "\n" << endl;
     
